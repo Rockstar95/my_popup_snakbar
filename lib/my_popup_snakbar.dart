@@ -294,30 +294,5 @@ class MyPopupSnakbar {
       curve: curve,
       dismissPreviousOverlay: dismissPreviousOverlay,
     );
-
-    late OverlayEntry overlayEntry;
-    overlayEntry = OverlayEntry(
-      builder: (_) {
-        return TopSnackBar(
-          onDismissed: () {
-            overlayEntry.remove();
-
-          },
-          animationDuration: animationDuration,
-          reverseAnimationDuration: reverseAnimationDuration,
-          displayDuration: displayDuration,
-          onTap: onTap,
-          persistent: persistent,
-          onAnimationControllerInit: onAnimationControllerInit,
-          padding: padding,
-          curve: curve,
-          reverseCurve: reverseCurve,
-          safeAreaValues: safeAreaValues,
-          dismissType: dismissType,
-          dismissDirections: dismissDirection,
-          child: child,
-        );
-      },
-    );
   }
 }
