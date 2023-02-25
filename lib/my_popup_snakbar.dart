@@ -10,6 +10,7 @@ export 'src/overlay_keys.dart' hide KeyedOverlay;
 export 'src/theme.dart';
 export 'src/toast/toast.dart';
 export 'src/overlay_state_finder.dart' hide findOverlayState, OverlaySupportState;
+export 'src/custom_snakbar.dart';
 
 /// The length of time the notification is fully displayed.
 Duration kNotificationDuration = const Duration(milliseconds: 2000);
