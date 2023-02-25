@@ -249,7 +249,8 @@ class MyPopupSnakbar {
 /// can be dismissed. This argument is only used when [dismissType] is equal
 /// to `DismissType.onSwipe`. Defaults to `[DismissDirection.up]`
   void showTopSnackBar(
-    OverlayState overlayState,
+    // OverlayState overlayState,
+    BuildContext context,
     Widget child, {
     Duration animationDuration = const Duration(milliseconds: 1200),
     Duration reverseAnimationDuration = const Duration(milliseconds: 550),
@@ -263,14 +264,44 @@ class MyPopupSnakbar {
     SafeAreaValues safeAreaValues = const SafeAreaValues(),
     DismissType dismissType = DismissType.onTap,
     List<DismissDirection> dismissDirection = const [DismissDirection.up],
+    bool dismissPreviousOverlay = true
   }) {
+    showOverlay(
+      (context, t) {
+        return TopSnackBar(
+          onDismissed: () {
+
+          },
+          animationDuration: animationDuration,
+          reverseAnimationDuration: reverseAnimationDuration,
+          displayDuration: displayDuration,
+          onTap: onTap,
+          persistent: persistent,
+          onAnimationControllerInit: onAnimationControllerInit,
+          padding: padding,
+          curve: curve,
+          reverseCurve: reverseCurve,
+          safeAreaValues: safeAreaValues,
+          dismissType: dismissType,
+          dismissDirections: dismissDirection,
+          child: child,
+        );
+      },
+      duration: displayDuration,
+      animationDuration: animationDuration,
+      reverseAnimationDuration: reverseAnimationDuration,
+      context: context,
+      curve: curve,
+      dismissPreviousOverlay: dismissPreviousOverlay,
+    );
+
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (_) {
         return TopSnackBar(
           onDismissed: () {
             overlayEntry.remove();
-            previousEntry = null;
+
           },
           animationDuration: animationDuration,
           reverseAnimationDuration: reverseAnimationDuration,
@@ -288,12 +319,5 @@ class MyPopupSnakbar {
         );
       },
     );
-
-    if (previousEntry != null && previousEntry!.mounted) {
-      previousEntry?.remove();
-    }
-
-    overlayState.insert(overlayEntry);
-    previousEntry = overlayEntry;
   }
 }

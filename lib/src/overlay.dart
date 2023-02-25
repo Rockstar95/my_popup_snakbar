@@ -106,7 +106,7 @@ OverlaySupportEntry showOverlay(
         overlayKey: overlayKey,
         overlaySupportState: overlaySupport,
         onDismissed: () {
-
+          previousEntry = null;
         },
       ),
     );
