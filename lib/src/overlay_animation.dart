@@ -19,7 +19,9 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final OverlaySupportState overlaySupportState;
 
-  _AnimatedOverlay({
+  final VoidCallback onDismissed;
+
+  const _AnimatedOverlay({
     required Key key,
     required this.animationDuration,
     required this.reverseAnimationDuration,
@@ -28,6 +30,7 @@ class _AnimatedOverlay extends StatefulWidget {
     required this.duration,
     required this.overlayKey,
     required this.overlaySupportState,
+    required this.onDismissed,
   })  : curve = curve ?? Curves.easeInOut,
         assert(animationDuration >= Duration.zero),
         assert(reverseAnimationDuration >= Duration.zero),
@@ -65,23 +68,23 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this,
-        duration: widget.animationDuration,
-        reverseDuration: widget.reverseAnimationDuration,
-        debugLabel: 'AnimatedOverlayShowHideAnimation');
+      vsync: this,
+      duration: widget.animationDuration,
+      reverseDuration: widget.reverseAnimationDuration,
+      debugLabel: 'AnimatedOverlayShowHideAnimation',
+    );
     super.initState();
-    final overlayEntry =
-        widget.overlaySupportState.getEntry(key: widget.overlayKey);
+    final overlayEntry = widget.overlaySupportState.getEntry(key: widget.overlayKey);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         overlayEntry?.dismiss(animate: false);
-      } else if (status == AnimationStatus.completed) {
+        widget.onDismissed.call();
+      }
+      else if (status == AnimationStatus.completed) {
         if (widget.duration > Duration.zero) {
-          _autoHideOperation =
-              CancelableOperation.fromFuture(Future.delayed(widget.duration))
-                ..value.whenComplete(() {
-                  hide();
-                });
+          _autoHideOperation = CancelableOperation.fromFuture(Future.delayed(widget.duration))..value.whenComplete(() {
+            hide();
+          });
         }
       }
     });
@@ -98,10 +101,10 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return widget.builder(
-              context, widget.curve.transform(_controller.value));
-        });
+      animation: _controller,
+      builder: (context, _) {
+        return widget.builder(context, widget.curve.transform(_controller.value));
+      },
+    );
   }
 }

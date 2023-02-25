@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../my_popup_snakbar.dart';
 
-class Toast {
-  Toast._private();
-
+class Toast extends StatelessWidget {
   /// Show the view or text notification for a short period of time.
   /// This time could be user-definable.
   // ignore: constant_identifier_names
@@ -14,43 +12,10 @@ class Toast {
   /// This time could be user-definable.
   // ignore: constant_identifier_names
   static const LENGTH_LONG = Duration(milliseconds: 3500);
-}
 
-/// Popup a message in front of screen.
-///
-/// [duration] : the duration to show a toast,
-/// for most situation, you can use [Toast.LENGTH_SHORT] and [Toast.LENGTH_LONG]
-///
-void toast(
-  String message, {
-  Duration duration = Toast.LENGTH_SHORT,
-  BuildContext? context,
-}) {
-  if (duration <= Duration.zero) {
-    //fast fail
-    return;
-  }
-
-  showOverlay(
-    (context, t) {
-      return IgnorePointer(
-        child: Opacity(
-          opacity: t,
-          child: _Toast(content: Text(message)),
-        ),
-      );
-    },
-    curve: Curves.ease,
-    key: const ValueKey('overlay_toast'),
-    duration: duration,
-    context: context,
-  );
-}
-
-class _Toast extends StatelessWidget {
   final Widget content;
 
-  const _Toast({Key? key, required this.content}) : super(key: key);
+  const Toast({Key? key, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
